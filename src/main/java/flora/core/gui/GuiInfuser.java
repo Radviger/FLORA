@@ -2,10 +2,14 @@ package flora.core.gui;
 
 import flora.core.ConstantsFLORA;
 import flora.core.block.TileInfuser;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
 
@@ -21,34 +25,51 @@ public class GuiInfuser extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(new ResourceLocation(ConstantsFLORA.GUI_INFUSER_TEX));
-		this.drawTexturedModalRect(42, 25, 0, ySize, 104, 14);
-		ArrayList<FluidTank> tanks= tileInfuser.getTotalFluidTank();
-		int total=tileInfuser.getTotalFluidAmount();
-		int currentX=44;
+		this.drawTexturedModalRect(42, 25, 0, ySize, 116, 20);
+		ArrayList<FluidTank> tanks = tileInfuser.getTotalFluidTank();
+		int total = tileInfuser.getTotalFluidAmount();
+		int currentX = 44;
+		GL11.glDisable(GL11.GL_LIGHTING);
+		List<String> text = new ArrayList<String>();
+		int mouseXTranslated = mouseX - guiLeft;
+		int mouseYTranslated = mouseY - guiTop;
+		for (FluidTank tank : tanks) {
+			if (tank.getFluid() != null) {
+				//this.mc.renderEngine.bindTexture(new ResourceLocation(ConstantsFLORA.PREFIX_MOD+"textures/fluid/"+tank.getFluid().getFluid().getName()+".png"));
+				float size = 1F * tank.getFluidAmount();
+				size /= total;
+				size *= 100;
+				//drawRectangleXRepeated(currentX, 27, 16, 16, 256, 256, tanks.lastIndexOf(tank)==tanks.size()-1? 144-currentX : (int)size, 10, 16, 1);
 
-		List<String> text=new ArrayList<String>();
-		int mouseXTranslated=mouseX-guiLeft;
-		int mouseYTranslated=mouseY-guiTop;
-		for(FluidTank tank:tanks){
-			if(tank.getFluid()!=null){
-				this.mc.renderEngine.bindTexture(new ResourceLocation(ConstantsFLORA.PREFIX_MOD+"textures/fluid/"+tank.getFluid().getFluid().getName()+".png"));
-				float size=1F*tank.getFluidAmount();
-				size/=total;
-				size*=100;
-				drawRectangleXRepeated(currentX, 27, 16, 16, 256, 256, tanks.lastIndexOf(tank)==tanks.size()-1? 144-currentX : (int)size, 10, 16, 1);
-				if(mouseXTranslated>currentX && mouseXTranslated<(currentX+size) && mouseYTranslated > 27 && mouseYTranslated<38){
-					text.add(EnumColor.DARK_GREEN+tank.getFluid().getFluid().getLocalizedName());
+
+				if (mouseXTranslated > currentX - 2 && mouseXTranslated < (currentX + size) + 15 && mouseYTranslated > 24 && mouseYTranslated < 46) {
+					text.add(EnumColor.DARK_GREEN + tank.getFluid().getFluid().getLocalizedName());
 					text.add(EnumColor.DARK_GREEN + "" + tank.getFluidAmount() + "mB" + EnumColor.WHITE);
 				}
-				currentX+=(int)size;
+				currentX += (int) size;
+
 			}
+			drawFluid(tank);
 		}
+		//DRAW Fluid
+		drawToplayer();
+		drawHoveringText(text, mouseXTranslated, mouseYTranslated + 30, fontRendererObj);
 
-		drawHoveringText(text, mouseXTranslated, mouseYTranslated+30, fontRendererObj);
 
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+	}
+
+	private void drawToplayer(){
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+		this.mc.renderEngine.bindTexture(new ResourceLocation(ConstantsFLORA.GUI_INFUSER_TEX));
+		this.drawTexturedModalRect(44, 27, 0, 186, 112, 16);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override
@@ -107,6 +128,29 @@ public class GuiInfuser extends GuiContainer {
 		tessellator.addVertexWithUV(x + width, y, zLevel, uMax * scaleU, v * scaleV);
 		tessellator.addVertexWithUV(x, y, zLevel, u * scaleU, v * scaleV);
 		tessellator.draw();
+	}
+	public void drawFluid(FluidTank tank){
+		// Bind textures from liquid.
+		int x = (width - xSize) / 2;
+		int y = (height - ySize) / 2;
+		//System.out.println("drawing rebbryrbtwckut");
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		this.mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		this.drawTexturedModelRectFromIcon(x - 81, (int)(y - 69 + (62 - (tank.getFluidAmount() * 0.012))), this.getFluidTexture(tank.getFluid().getFluid(), false),  16, 16);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	public static IIcon getFluidTexture(Fluid fluid, boolean flowing) {
+		if (fluid == null) {
+			return null;
+		}
+		IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
+		if (icon == null) {
+			icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
+		}
+		return icon;
 	}
 }
 
