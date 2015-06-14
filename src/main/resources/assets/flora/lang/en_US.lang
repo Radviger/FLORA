@@ -1,5 +1,6 @@
 itemGroup.FLORA=FLORA
 tile.FLORAInfuser.name=Fluidic Armor Infuser
+gui.FI=Fluidic Armor Infuser
 flora.key.category=FLORA
 flora.key.ender=Teleport
 flora.key.fire=Shoot Fireballs

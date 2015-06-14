@@ -17,10 +17,10 @@ public class ContainerInfuser extends Container {
 
 
 
-		addSlotToContainer(new SlotFloraArmor(tileEntity, 0, 43, 61, 0));
-		addSlotToContainer(new SlotFloraArmor(tileEntity, 1, 63, 61, 1));
-		addSlotToContainer(new SlotFloraArmor(tileEntity, 2, 83, 61, 2));
-		addSlotToContainer(new SlotFloraArmor(tileEntity, 3, 103, 61, 3));
+		addSlotToContainer(new SlotFloraArmor(tileEntity, 0, 64, 61, 0));
+		addSlotToContainer(new SlotFloraArmor(tileEntity, 1, 84, 61, 1));
+		addSlotToContainer(new SlotFloraArmor(tileEntity, 2, 104, 61, 2));
+		addSlotToContainer(new SlotFloraArmor(tileEntity, 3, 124, 61, 3));
 
 		addSlotToContainer(new SlotBucket(tileEntity, 4, 11, 26));
 		bindPlayerInventory(inventoryPlayer);
