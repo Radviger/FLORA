@@ -4,11 +4,11 @@ import flora.core.ConstantsFLORA;
 import flora.core.block.TileInfuser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
@@ -25,8 +25,8 @@ public class GuiInfuser extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("gui.FI"), 8, 6, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        this.fontRendererObj.drawString(I18n.format("gui.FI"), 8, 6, 4210752);
+        fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -47,7 +47,7 @@ public class GuiInfuser extends GuiContainer {
 				size*=100;
 				drawRectangleXRepeated(currentX, 27, tanks.lastIndexOf(tank)==tanks.size()-1? 144-currentX : (int)size, 16, tank.getFluid().getFluid());
 				if(mouseXTranslated>currentX && mouseXTranslated<(currentX+size) && mouseYTranslated > 27 && mouseYTranslated<38){
-					text.add(EnumColor.DARK_GREEN+tank.getFluid().getFluid().getLocalizedName());
+					text.add(EnumColor.DARK_GREEN+tank.getFluid().getFluid().getLocalizedName(tank.getFluid()));
 					text.add(EnumColor.DARK_GREEN + "" + tank.getFluidAmount() + "mB" + EnumColor.WHITE);
 				}
 				currentX+=(int)size;
@@ -107,19 +107,19 @@ public class GuiInfuser extends GuiContainer {
 
 	public void drawRectangleStretched(int x, int y, Fluid fluid)
 	{
-        this.mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        this.drawTexturedModelRectFromIcon(x, y, getFluidTexture(fluid, false), 16, 10);
+        this.mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		this.drawTexturedModalRect(x, y, getFluidTexture(fluid, false), 16, 10);
 	}
     //Taken from BuildCraft... If you own it, ask and I'll remove it
-    public static IIcon getFluidTexture(Fluid fluid, boolean flowing) {
-        if (fluid == null) {
-            return null;
-        }
-        IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
-        if (icon == null) {
-            icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
-        }
-        return icon;
-    }
+	public static TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
+		if (fluid == null) {
+			return null;
+		}
+		TextureAtlasSprite icon = flowing ? Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(fluid.getFlowing().toString()) : Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(fluid.getStill().toString());
+		if (icon == null) {
+			icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)).getAtlasSprite("missingno");
+		}
+		return icon;
+	}
 }
 

@@ -1,7 +1,6 @@
 package flora.core.logic;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+
 import flora.core.item.ItemArmorFLORA;
 import flora.core.pulse.*;
 import net.minecraft.entity.Entity;
@@ -10,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -20,6 +20,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import cofh.thermalfoundation.fluid.TFFluids;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +98,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[6][6]>0){
 				intensity=fluidInteractionMatrix[6][6];
 				if(rand.nextInt(100)<intensity){
-					event.player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 10));
+					event.player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 10));
 				}
 			}
 
@@ -121,7 +123,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[3][3]>0){
 				intensity=fluidInteractionMatrix[3][3];
 				if(rand.nextInt(2500)<intensity){
-					event.player.curePotionEffects(new ItemStack(Items.milk_bucket));
+					event.player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
 				}
 			}
 			//Cyrotheum-Cyrotheum

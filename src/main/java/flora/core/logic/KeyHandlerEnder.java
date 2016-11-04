@@ -1,17 +1,19 @@
 package flora.core.logic;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+
 import flora.core.ConstantsFLORA;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
 public class KeyHandlerEnder{
@@ -35,9 +37,9 @@ public class KeyHandlerEnder{
 				if (keys[i].isPressed()) {
 					ByteBuf data = Unpooled.buffer(4);
 					data.writeInt(i);
-					C17PacketCustomPayload packet = new C17PacketCustomPayload(ConstantsFLORA.modId, data);
-					EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-					player.sendQueue.addToSendQueue(packet);
+					CPacketCustomPayload packet = new CPacketCustomPayload(ConstantsFLORA.modId, new PacketBuffer(data));
+					EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+					player.connection.sendPacket(packet);
 				}
 			}
 		}

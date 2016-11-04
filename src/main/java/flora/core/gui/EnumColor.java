@@ -1,9 +1,11 @@
 package flora.core.gui;
 
-import net.minecraft.util.StatCollector;
+
 
 
 //EnumColor class borrowed from Mekanism
+
+import net.minecraft.client.resources.I18n;
 
 public enum EnumColor
 {
@@ -50,7 +52,7 @@ public enum EnumColor
 	 */
 	public String getLocalizedName()
 	{
-		return StatCollector.translateToLocal("color." + unlocalizedName);
+		return I18n.format("color." + unlocalizedName);
 	}
 
 	/**
