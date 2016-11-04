@@ -1,7 +1,6 @@
 package flora.core;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+
 import flora.core.logic.ArmorEffectsManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -11,8 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+
 
 import java.util.HashMap;
 

@@ -1,13 +1,6 @@
 package flora.core;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+
 import flora.core.block.BlockInfuser;
 import flora.core.block.TileInfuser;
 import flora.core.gui.ContainerInfuser;
@@ -20,12 +13,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import cofh.redstonearsenal.item.RAItems;
 import cofh.thermalexpansion.block.TEBlocks;
 import cofh.thermalexpansion.item.TEItems;
 
-public class CommonProxy implements IGuiHandler{
+public class CommonProxy implements IGuiHandler {
 
 	public static CreativeTab tab=new CreativeTab(ConstantsFLORA.nameCreativeTab);
     public ArmorEffectsManager effectsManager;

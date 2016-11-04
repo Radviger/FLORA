@@ -1,15 +1,15 @@
 package flora.core;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import flora.core.logic.KeyHandlerEnder;
 import flora.core.pulse.EntityPulse;
 import flora.core.pulse.RenderPulse;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy{
 	public static IIcon coalPulseIcon;
