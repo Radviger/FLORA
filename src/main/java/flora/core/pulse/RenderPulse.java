@@ -4,17 +4,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderPulse extends Render {
+public class RenderPulse /*extends Render*/ {
 	public RenderPulse(float par1) {
 		size=par1;
 	}
-	float size;
-
+	float size;}
+/*
 	@Override
 	public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9) {
 		doRender((EntityPulse)var1, var2, var4, var6, var8, var9);
@@ -58,4 +57,4 @@ public class RenderPulse extends Render {
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 	}
-}
+}*/

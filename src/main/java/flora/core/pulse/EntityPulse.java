@@ -2,7 +2,6 @@ package flora.core.pulse;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -29,8 +28,6 @@ public abstract class EntityPulse extends EntityFireball {
 
 	@Override
 	public void setFire(int par1) {}
-
-	public abstract IIcon getRenderIcon();
 
 	public abstract ResourceLocation getResourceLocation();
 }

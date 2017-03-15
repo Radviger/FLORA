@@ -3,11 +3,11 @@ package flora.core.pulse;
 import flora.core.ClientProxy;
 import flora.core.ConstantsFLORA;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityPulseSlow extends EntityPulse {
@@ -16,10 +16,8 @@ public class EntityPulseSlow extends EntityPulse {
 		super(par1World, e, par8, par10, par12);
 	}
 
-	@Override
-	public IIcon getRenderIcon() {
-		return ClientProxy.cryotheumPulseIcon;
-	}
+	//@Override
+	//public IIcon getRenderIcon() {return ClientProxy.cryotheumPulseIcon;}
 
 	@Override
 	public ResourceLocation getResourceLocation() {
@@ -32,9 +30,9 @@ public class EntityPulseSlow extends EntityPulse {
 
 
 	@Override
-	protected void onImpact(MovingObjectPosition var1) {
+	protected void onImpact(RayTraceResult var1) {
 		if(var1.entityHit!=sender&& var1.entityHit!=null && var1.entityHit instanceof EntityLivingBase){
-			((EntityLivingBase) var1.entityHit).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 3));
+			((EntityLivingBase) var1.entityHit).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 3));
 		}
 		this.setDead();
 	}

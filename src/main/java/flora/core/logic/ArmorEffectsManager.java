@@ -15,11 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
-import cofh.thermalfoundation.fluid.TFFluids;
+import cofh.thermalfoundation.init.TFFluids;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -107,14 +108,14 @@ public class ArmorEffectsManager{
 				intensity=fluidInteractionMatrix[5][5];
 				if(event.player.worldObj.getTotalWorldTime()%600==0){
 					if(!modifiedMaxHealthPlayers.containsKey(player.getDisplayName())){
-						modifiedMaxHealthPlayers.put(player.getDisplayName(), player.getMaxHealth());
+						modifiedMaxHealthPlayers.put(player.getDisplayName().toString(), player.getMaxHealth());
 					}
-					event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(Math.max(4, ((intensity)*.005*rand.nextGaussian())+20));
+					event.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(4, ((intensity)*.005*rand.nextGaussian())+20));
 
 				}
 			}else{
 				if(modifiedMaxHealthPlayers.containsKey(player.getDisplayName())){
-					player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(modifiedMaxHealthPlayers.get(player.getDisplayName()));
+					player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(modifiedMaxHealthPlayers.get(player.getDisplayName()));
 					modifiedMaxHealthPlayers.remove(player.getDisplayName());
 				}
 			}
@@ -146,7 +147,7 @@ public class ArmorEffectsManager{
 				intensity=fluidInteractionMatrix[3][6];
 				if(rand.nextInt(200000)<intensity){
 
-					player.getFoodStats().func_151686_a((ItemFood) Items.apple, new ItemStack(Items.apple));
+					player.getFoodStats().addStats((ItemFood) Items.APPLE, new ItemStack(Items.APPLE));
 				}
 			}
 
@@ -154,7 +155,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[2][6]>0){
 				intensity=fluidInteractionMatrix[2][6];
 
-				if(player.worldObj.getBiomeGenForCoords(player.chunkCoordX, player.chunkCoordZ).temperature<=.2){
+				if(player.worldObj.getBiomeGenForCoords(player.getPosition()).getTemperature() <= .2){
 					if(rand.nextInt(1000)<intensity){
 						player.attackEntityFrom(DamageSource.starve, 1F);
 					}
@@ -165,7 +166,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[3][5]>0){
 				intensity=fluidInteractionMatrix[3][5];
 				if(rand.nextInt(5000)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
 						if(target!=player){
@@ -180,7 +181,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[0][5]>0){
 				intensity=fluidInteractionMatrix[0][5];
 				if(rand.nextInt(5000)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
 						if(target!=player){
@@ -195,7 +196,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[1][5]>0){
 				intensity=fluidInteractionMatrix[1][5];
 				if(rand.nextInt(5000)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
 						if(target!=player){
@@ -210,7 +211,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[2][5]>0){
 				intensity=fluidInteractionMatrix[2][5];
 				if(rand.nextInt(5000)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
 						if(target!=player){
@@ -225,7 +226,7 @@ public class ArmorEffectsManager{
 			if(fluidInteractionMatrix[4][5]>0){
 				intensity=fluidInteractionMatrix[4][5];
 				if(rand.nextInt(5000)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
 						if(target!=player){
@@ -248,29 +249,29 @@ public class ArmorEffectsManager{
 			//Pyrotheum-Mana
 			if(fluidInteractionMatrix[3][1]>0){
 				intensity=fluidInteractionMatrix[3][1];
-				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, (int)Math.log10(intensity)));
+				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 1, (int)Math.log10(intensity)));
 			}
 
 			//Pyrotheum-Cyrotheum
 			if(fluidInteractionMatrix[2][1]>0){
 				intensity=fluidInteractionMatrix[2][1];
-				player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 1, (int)Math.log10(intensity)));
+				player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, (int)Math.log10(intensity)));
 			}
 			//Coal-Cyrotheum
 			if(fluidInteractionMatrix[2][0]>0){
 				intensity=fluidInteractionMatrix[2][0];
-				player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 1, (int)Math.log10(intensity)));
+				player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 1, (int)Math.log10(intensity)));
 			}
 			//Ender-Mana
 			if(fluidInteractionMatrix[3][4]>0){
 				intensity=fluidInteractionMatrix[3][4];
-				player.addPotionEffect(new PotionEffect(Potion.jump.id, 1, (int)Math.log10(intensity)));
+				player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 1, (int)Math.log10(intensity)));
 			}
 			//Coal-Mana
 			if(fluidInteractionMatrix[0][3]>0){
 				intensity=fluidInteractionMatrix[0][3];
 				if(rand.nextInt(500)<intensity){
-					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(20, 3, 20));
+					List<EntityLivingBase> nearbyEntities=player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.getCollisionBoundingBox().expand(20, 3, 20));
 					if(nearbyEntities.size()>1){
 
 						EntityLivingBase target=nearbyEntities.get(rand.nextInt(nearbyEntities.size()));
@@ -294,7 +295,7 @@ public class ArmorEffectsManager{
 	private static HashMap<String, Long> fireResistenceCooldown=new HashMap<String, Long>();
 	@SubscribeEvent
 	public void onPlayerHurt(LivingHurtEvent event){
-		Entity attacker=event.source.getEntity();
+		Entity attacker=event.getSource().getEntity();
 		if(attacker instanceof EntityPlayer){
 			if(!attacker.worldObj.isRemote){
 				EntityPlayer attackerPlayer= (EntityPlayer) attacker;
@@ -305,23 +306,23 @@ public class ArmorEffectsManager{
 				//Glowstone-Coal
 				if(fluidInteractionMatrix[0][6]>0){
 					intensity=fluidInteractionMatrix[0][6];
-					event.entity.setFire((int) (intensity*20));
+					event.getEntity().setFire((int) (intensity*20));
 				}
 
 				//Coal-Pyrotheum
 				if(fluidInteractionMatrix[1][0]>0){
 					intensity=fluidInteractionMatrix[1][0];
-					if(event.entity.isBurning()){
+					if(event.getEntity().isBurning()){
 
-						event.entity.worldObj.createExplosion(event.entity, event.entity.posX, event.entity.posY, event.entity.posZ, (float) Math.sqrt(intensity), true);
+						event.getEntity().worldObj.createExplosion(event.getEntity(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, (float) Math.sqrt(intensity), true);
 					}
 				}
 			}
 		}
 
-		if(event.entity instanceof EntityPlayer){
+		if(event.getEntity() instanceof EntityPlayer){
 
-			EntityPlayer player= (EntityPlayer) event.entity;
+			EntityPlayer player= (EntityPlayer) event.getEntity();
 			float[][] fluidInteractionMatrix=getEffectMatrix(player);
 			float intensity;
 			Random rand=new Random();
@@ -332,12 +333,12 @@ public class ArmorEffectsManager{
 				//Cyrotheum-Ender
 				if(fluidInteractionMatrix[2][4]>0){
 					intensity=fluidInteractionMatrix[2][4];
-					if(player.getHealth()-event.ammount<=4){
-						event.ammount=0;
+					if(player.getHealth()-event.getAmount() <=4){
+						event.setAmount(0);
 						int x= (int) ((int) player.posX + rand.nextInt((int) (6*intensity)) - ((int)3*intensity));
 						int z= (int) ((int) player.posZ + rand.nextInt((int) (6*intensity)) - ((int)3*intensity));
 						int y=255;
-						while(player.worldObj.isAirBlock(x, y-1, z)){
+						while(player.worldObj.isAirBlock(new BlockPos(x, y-1, z))){
 							y--;
 						}
 						player.setPositionAndUpdate(x+.5, y, z+.5);
@@ -347,29 +348,29 @@ public class ArmorEffectsManager{
 				//Coal-Ender
 				if(fluidInteractionMatrix[0][4]>0){
 					intensity=fluidInteractionMatrix[0][4];
-					if(event.source.getEntity() instanceof EntityLiving){
-						event.ammount=0;
+					if(event.getSource().getEntity() instanceof EntityLiving){
+						event.setAmount(0);
 						int x= (int) ((int) player.posX + rand.nextInt((int) (2*intensity)) - ((int)intensity));
 						int z= (int) ((int) player.posZ + rand.nextInt((int) (2*intensity)) - ((int)intensity));
 						int y=255;
-						while(player.worldObj.isAirBlock(x, y-1, z)){
+						while(player.worldObj.isAirBlock(new BlockPos(x, y-1, z))){
 							y--;
 						}
-						((EntityLiving)event.source.getEntity()).setPositionAndUpdate(x + .5, y, z + .5);
+						((EntityLiving)event.getSource().getEntity()).setPositionAndUpdate(x + .5, y, z + .5);
 					}
 				}
 
 				//Pyrotheum-Glowstone
 				if(fluidInteractionMatrix[1][6]>0){
 					intensity=fluidInteractionMatrix[1][6];
-					if(event.source.isFireDamage()){
+					if(event.getSource().isFireDamage()){
 						if(!fireResistenceCooldown.containsKey(player.getDisplayName())||fireResistenceCooldown.get(player.getDisplayName())<intensity*10){
 							long currentCooldown=0;
 							if(fireResistenceCooldown.containsKey(player.getDisplayName())){
 								currentCooldown=fireResistenceCooldown.get(player.getDisplayName());
 							}
-							fireResistenceCooldown.put(player.getDisplayName(), Math.max(40, currentCooldown+40));
-							event.ammount=0;
+							fireResistenceCooldown.put(player.getDisplayName().toString(), Math.max(40, currentCooldown+40));
+							event.setAmount(0);
 						}
 					}
 				}
@@ -380,22 +381,22 @@ public class ArmorEffectsManager{
 	@SubscribeEvent
 	public void onPlayerFall(LivingFallEvent event){
 
-		if(event.entity instanceof EntityPlayer){
-			float[][] fluidInteractionMatrix=getEffectMatrix((EntityPlayer) event.entity);
+		if(event.getEntity() instanceof EntityPlayer){
+			float[][] fluidInteractionMatrix=getEffectMatrix((EntityPlayer) event.getEntity());
 			float intensity;
 			Random rand=new Random();
 
 			//Pyrotheum-Pyrotheum
 			if(fluidInteractionMatrix[1][1]>0){
 				intensity=fluidInteractionMatrix[1][1];
-				if(event.distance>2){
-					event.distance+=Math.sqrt(intensity);
+				if(event.getDistance()>2){
+					event.setDistance((float) (event.getDistance() +  Math.sqrt(intensity)));
 				}
 			}
 			//Ender-Pyrotheum
 			if(fluidInteractionMatrix[1][4]>0){
 				intensity=fluidInteractionMatrix[1][4];
-				event.distance/=intensity;
+				event.setDistance(event.getDistance() / intensity);
 
 			}
 		}

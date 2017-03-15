@@ -1,21 +1,22 @@
 package flora.core.block;
 
-import cofh.core.item.ItemBucket;
 import flora.core.item.ItemArmorFLORA;
 import flora.core.logic.ArmorEffectsManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.*;
 
 import java.util.ArrayList;
 
-public class TileInfuser extends TileEntity implements IInventory, IFluidHandler {
+public class TileInfuser extends TileEntity implements IInventory, IFluidHandler, ITickable {
     private ItemStack[] inv = new ItemStack[5];
 
     public TileInfuser() {
@@ -70,12 +71,12 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (getStackInSlot(4) != null && getFluidFromItem(getStackInSlot(4)) != null) {
             FluidStack fluidStack = getFluidFromItem(getStackInSlot(4));
             if (fillArmorWithFluid(fluidStack, true)) {
                 if (getStackInSlot(4).getItem() instanceof ItemBucket) {
-                    setInventorySlotContents(4, new ItemStack(Items.bucket));
+                    setInventorySlotContents(4, new ItemStack(Items.BUCKET));
                 }
                 if (getStackInSlot(4).getItem() instanceof IFluidContainerItem) {
                     ((IFluidContainerItem) getStackInSlot(4).getItem()).drain(getStackInSlot(4), ((IFluidContainerItem) getStackInSlot(4).getItem()).getFluid(getStackInSlot(4)).amount, true);
@@ -108,7 +109,7 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
+    public ItemStack removeStackFromSlot(int var1) {
         if (inv[var1] != null) {
             ItemStack itemstack = inv[var1];
             inv[var1] = null;
@@ -124,12 +125,12 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return BlockInfuser.blockName;
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -144,18 +145,38 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer p) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer p) {
 
     }
 
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
         return var1 == 4 ? getFluidFromItem(var2) != null : var2.getItem() instanceof ItemArmorFLORA && ((ItemArmorFLORA) var2.getItem()).type.ordinal() == var1;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     public boolean fillArmorWithFluid(FluidStack fluid, boolean doFill) {
@@ -197,7 +218,7 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if(!canFill(from, resource.getFluid()))
             return 0;
         int inputAmount = resource.amount;
@@ -206,22 +227,22 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return null;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return ArmorEffectsManager.fluidIntegerHashMap.containsKey(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 
@@ -248,7 +269,7 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         ArrayList<FluidTank> tanks = getTotalFluidTank();
         FluidTankInfo[] r = new FluidTankInfo[tanks.size()];
         for (int i = 0; i < tanks.size(); i++) {
@@ -275,7 +296,7 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         NBTTagList tagList = new NBTTagList();
 
@@ -289,5 +310,6 @@ public class TileInfuser extends TileEntity implements IInventory, IFluidHandler
         }
 
         nbt.setTag("Items", tagList);
+        return nbt;
     }
 }

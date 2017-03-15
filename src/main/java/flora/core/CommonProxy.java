@@ -11,6 +11,7 @@ import flora.core.pulse.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -22,9 +23,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import cofh.redstonearsenal.item.RAItems;
-import cofh.thermalexpansion.block.TEBlocks;
-import cofh.thermalexpansion.item.TEItems;
+import cofh.redstonearsenal.init.RAItems;
+import cofh.thermalexpansion.init.TEBlocks;
+import cofh.thermalexpansion.init.TEItems;
 
 public class CommonProxy implements IGuiHandler {
 
@@ -37,7 +38,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-
+/*
         //Leadstone
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemArmorFLORA.armors[0]), "AAA", "BCB", "   ", 'A', "blockLead", 'B', TEItems.capacitorBasic, 'C', RAItems.armorFluxHelmet));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemArmorFLORA.armors[1]), "ACA", "ABA", "ABA", 'A', "blockLead", 'B', TEItems.capacitorBasic, 'C', RAItems.armorFluxPlate));
@@ -64,6 +65,7 @@ public class CommonProxy implements IGuiHandler {
 
         //Infuser
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInfuser.instance), "DDD", "BAB", "DDD", 'A', TEItems.pneumaticServo, 'B', new ItemStack(TEBlocks.blockMachine, 1, 5), 'D', "ingotLead"));
+        */
     }
 
 	public void init(FMLInitializationEvent event) {
@@ -90,16 +92,16 @@ public class CommonProxy implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 		if(tileEntity instanceof TileInfuser){
-			return new ContainerInfuser(player.inventory, (TileInfuser) world.getTileEntity(x, y, z));
+			return new ContainerInfuser(player.inventory, (TileInfuser) world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 		if(tileEntity instanceof TileInfuser){
 			return new GuiInfuser((TileInfuser) tileEntity, player.inventory);
 		}

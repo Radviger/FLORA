@@ -3,9 +3,8 @@ package flora.core.pulse;
 import flora.core.ClientProxy;
 import flora.core.ConstantsFLORA;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityPulsePyrotheum extends EntityPulse{
@@ -13,10 +12,8 @@ public class EntityPulsePyrotheum extends EntityPulse{
 		super(par1World, e, par8, par10, par12);
 	}
 
-	@Override
-	public IIcon getRenderIcon() {
-		return ClientProxy.pyrotheumPulseIcon;
-	}
+	//@Override
+	//public IIcon getRenderIcon() {return ClientProxy.pyrotheumPulseIcon;}
 
 	@Override
 	public ResourceLocation getResourceLocation() {
@@ -29,7 +26,7 @@ public class EntityPulsePyrotheum extends EntityPulse{
 
 
 	@Override
-	protected void onImpact(MovingObjectPosition var1) {
+	protected void onImpact(RayTraceResult var1) {
 		if(var1.entityHit!=sender&&var1.entityHit!=null && var1.entityHit instanceof EntityLivingBase){
 			var1.entityHit.setFire(200);
 		}

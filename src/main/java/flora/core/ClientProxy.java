@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy{
-	public static IIcon coalPulseIcon;
+	/*public static IIcon coalPulseIcon;
 	public static IIcon enderPulseIcon;
 	public static IIcon cryotheumPulseIcon;
 	public static IIcon pyrotheumPulseIcon;
@@ -37,7 +37,7 @@ public class ClientProxy extends CommonProxy{
 		pyrotheumPulseIcon=e.map.registerIcon(ConstantsFLORA.PREFIX_MOD+"pyrotheum_pulse");
 
 		manaPulseIcon=e.map.registerIcon(ConstantsFLORA.PREFIX_MOD+"mana_pulse");
-	}
+	}*/
 
 
 }

@@ -1,16 +1,15 @@
 package flora.core.item;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import flora.core.CommonProxy;
 import flora.core.ConstantsFLORA;
 import flora.core.gui.EnumColor;
 import flora.core.logic.ArmorEffectsManager;
 import flora.core.logic.EnumArmorQuality;
 import flora.core.logic.EnumArmorType;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +19,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -31,15 +31,11 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 	static ArmorMaterial[] materials;
 
 	public ItemArmorFLORA(EnumArmorType type, EnumArmorQuality quality) {
-		super(materials[quality.ordinal()], 0, type.ordinal());
+		super(materials[quality.ordinal()], 0, EntityEquipmentSlot.CHEST);
 		this.type=type;
 		this.quality=quality;
 	}
 
-	@Override
-	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon=par1IconRegister.registerIcon(ConstantsFLORA.PREFIX_MOD+"Armor"+quality.name+type.name);
-	}
 
 	public static ItemArmorFLORA[] armors= new ItemArmorFLORA[ 16 ];
 	public EnumArmorQuality quality;
@@ -48,7 +44,7 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 		materials=new ArmorMaterial[4];
 		for(int i=0;i<4;i++){
 			EnumArmorQuality quality=EnumArmorQuality.values()[i];
-			materials[i]=EnumHelper.addArmorMaterial(quality.name, 0, new int[]{ quality.protection,quality.protection, quality.protection, quality.protection}, 0);
+			//materials[i]=EnumHelper.addArmorMaterial(quality.name, 0, new int[]{ quality.protection,quality.protection, quality.protection, quality.protection}, 0);
 		}
 		for(int i=0; i<4;i++){
 			for(int j=0;j<4;j++){
@@ -76,7 +72,7 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 			for(FluidTank tank:getFluidTanks(par1ItemStack)){
-				par3List.add(EnumColor.DARK_AQUA+tank.getFluid().getFluid().getLocalizedName()+" : "+tank.getFluidAmount()+"mb");
+				par3List.add(EnumColor.DARK_AQUA+tank.getFluid().getFluid().getLocalizedName(tank.getFluid())+" : "+tank.getFluidAmount()+"mb");
 			}
 			par3List.add(EnumColor.DARK_BLUE+"Capacity: "+quality.storage);
 			par3List.add(EnumColor.PURPLE+"Active Effects:");
@@ -105,7 +101,7 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
-		return new ArmorProperties(0, getArmorMaterial().getDamageReductionAmount(slot) * 0.0425, Integer.MAX_VALUE);
+		return new ArmorProperties(0, getArmorMaterial().getDamageReductionAmount(EntityEquipmentSlot.values()[slot]) * 0.0425, Integer.MAX_VALUE);
 	}
 
 	@Override
@@ -121,7 +117,7 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 	public static final String NBT_FLUID_TAG_LIST="FLORA Armor Fluid Tag List";
 
 	public ArrayList<FluidTank> getFluidTanks(ItemStack item){
-		NBTTagCompound nbt = item.stackTagCompound;
+		NBTTagCompound nbt = item.getTagCompound();
 		ArrayList<FluidTank> r=new ArrayList<FluidTank>();
 
 		if(nbt==null){
@@ -140,11 +136,11 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 	}
 
 	public void setFluidTanks(ItemStack item, ArrayList<FluidTank> fluids){
-		if(item.stackTagCompound==null){
-			item.stackTagCompound=new NBTTagCompound();
+		if(item.hasTagCompound()){
+			item.setTagCompound(new NBTTagCompound());
 		}
 
-		NBTTagCompound nbt=item.stackTagCompound;
+		NBTTagCompound nbt=item.getTagCompound();
 
 		NBTTagList list=new NBTTagList();
 		for(FluidTank tank:fluids){
@@ -155,8 +151,8 @@ public class ItemArmorFLORA extends ItemArmor implements ISpecialArmor{
 		nbt.setTag(NBT_FLUID_TAG_LIST, list);
 	}
 
-	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+
+	public String getArmorTexture(int slot) {
 		return ConstantsFLORA.PREFIX_MOD+"textures/armor/"+quality.name+ (slot==2 ? "_1" : "")+".png";
 	}
 

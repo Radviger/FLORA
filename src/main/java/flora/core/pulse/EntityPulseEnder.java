@@ -4,9 +4,8 @@ import flora.core.ClientProxy;
 import flora.core.ConstantsFLORA;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -16,10 +15,10 @@ public class EntityPulseEnder extends EntityPulse {
 		super(par1World, e, par8, par10, par12);
 	}
 
-	@Override
-	public IIcon getRenderIcon(){
-		return ClientProxy.enderPulseIcon;
-	}
+	//@Override
+	//public IIcon getRenderIcon(){
+	//	return ClientProxy.enderPulseIcon;
+	//}
 
 	@Override
 	public ResourceLocation getResourceLocation() {
@@ -32,7 +31,7 @@ public class EntityPulseEnder extends EntityPulse {
 
 
 	@Override
-	protected void onImpact(MovingObjectPosition var1) {
+	protected void onImpact(RayTraceResult var1) {
 		if(!(var1.entityHit instanceof EntityPlayer)&&var1.entityHit!=null && var1.entityHit instanceof EntityLivingBase && !var1.entityHit.worldObj.isRemote){
 			Random rand=new Random();
 			((EntityLivingBase) var1.entityHit).setPositionAndUpdate(var1.entityHit.posX+(rand.nextDouble()*10)-5, var1.entityHit.posY+5, var1.entityHit.posZ+(rand.nextDouble()*10)-5);
